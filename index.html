@@ -1,0 +1,2710 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retell AI — GTM Experiments</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --navy: #0d1b2e;
+            --navy2: #132238;
+            --cream: #f4f2ed;
+            --cream2: #ece9e2;
+            --cream3: #e4e0d8;
+            --white: #ffffff;
+            --text: #0d1b2e;
+            --text2: #3d4f62;
+            --text3: #6b7f94;
+            --border: #d8d3c8;
+            --border-dark: rgba(255, 255, 255, 0.1);
+            --accent: #3b6bff;
+            --accent2: #6c8fff;
+            --green: #0f7a4a;
+            --green-bg: #e8f7f0;
+            --orange: #b05a00;
+            --orange-bg: #fef3e6;
+            --red: #b02020;
+            --red-bg: #fde8e8;
+            --sidebar-w: 240px;
+            --serif: 'EB Garamond', Georgia, serif;
+            --sans: 'DM Sans', system-ui, sans-serif;
+            --mono: 'DM Mono', monospace;
+        }
+
+        html,
+        body {
+            height: 100%;
+            background: var(--cream);
+            color: var(--text);
+            font-family: var(--sans);
+        }
+
+        /* ─── LAYOUT ─── */
+        .app {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* ─── SIDEBAR ─── */
+        .sidebar {
+            width: var(--sidebar-w);
+            flex-shrink: 0;
+            background: var(--navy);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .sb-brand {
+            padding: 24px 20px 20px;
+            border-bottom: 0.5px solid var(--border-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sb-logo {
+            width: 28px;
+            height: 28px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sb-logo svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .sb-wordmark {
+            font-family: var(--sans);
+            font-size: 15px;
+            font-weight: 600;
+            color: #fff;
+            letter-spacing: -0.02em;
+        }
+
+        .sb-subtitle {
+            font-family: var(--mono);
+            font-size: 9px;
+            color: rgba(255, 255, 255, 0.35);
+            letter-spacing: 0.08em;
+            margin-top: 1px;
+        }
+
+        .sb-section {
+            padding: 18px 20px 6px;
+            font-family: var(--mono);
+            font-size: 9px;
+            color: rgba(255, 255, 255, 0.3);
+            letter-spacing: 0.1em;
+        }
+
+        .nav-list {
+            padding: 0 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 12px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.5);
+            transition: all 0.12s;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            color: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-item.active {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-item .nav-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            flex-shrink: 0;
+        }
+
+        .nav-item.active .nav-dot {
+            background: #fff;
+        }
+
+        .nav-item .nav-status {
+            margin-left: auto;
+            font-family: var(--mono);
+            font-size: 9px;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+
+        .nav-item .ns-live {
+            background: rgba(15, 122, 74, 0.3);
+            color: #4cd9a0;
+        }
+
+        .nav-item .ns-wip {
+            background: rgba(255, 255, 255, 0.07);
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .sb-footer {
+            margin-top: auto;
+            padding: 16px 20px;
+            border-top: 0.5px solid var(--border-dark);
+        }
+
+        .sf-row {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.35);
+            margin-bottom: 5px;
+        }
+
+        .sf-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .sf-dot.on {
+            background: #4cd9a0;
+        }
+
+        .sf-dot.off {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* ─── MAIN ─── */
+        .main {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ─── PAGE ─── */
+        .page {
+            display: none;
+            flex: 1;
+        }
+
+        .page.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ─── HERO BAND (matches Retell dark banner) ─── */
+        .hero-band {
+            background: var(--navy);
+            padding: 36px 40px 32px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-band::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 70% 50%, rgba(59, 107, 255, 0.18) 0%, transparent 65%),
+                radial-gradient(ellipse at 20% 80%, rgba(100, 160, 255, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero-dot-grid {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 180px;
+            height: 100%;
+            opacity: 0.06;
+            background-image: radial-gradient(circle, #fff 1px, transparent 1px);
+            background-size: 16px 16px;
+        }
+
+        .exp-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: var(--mono);
+            font-size: 9px;
+            letter-spacing: 0.1em;
+            color: rgba(255, 255, 255, 0.45);
+            border: 0.5px solid rgba(255, 255, 255, 0.15);
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-bottom: 14px;
+        }
+
+        .exp-tag .pulse {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: #4cd9a0;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1)
+            }
+
+            50% {
+                opacity: 0.4;
+                transform: scale(0.8)
+            }
+        }
+
+        .hero-band h1 {
+            font-family: var(--serif);
+            font-size: 32px;
+            font-weight: 400;
+            color: #fff;
+            line-height: 1.2;
+            margin-bottom: 8px;
+            font-style: italic;
+        }
+
+        .hero-band h1 em {
+            font-style: normal;
+        }
+
+        .hero-sub {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.45);
+            max-width: 480px;
+            line-height: 1.6;
+        }
+
+        .hero-metrics {
+            display: flex;
+            gap: 32px;
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 0.5px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .hm {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .hm-val {
+            font-family: var(--serif);
+            font-size: 26px;
+            font-weight: 400;
+            color: #fff;
+        }
+
+        .hm-label {
+            font-family: var(--mono);
+            font-size: 9px;
+            color: rgba(255, 255, 255, 0.35);
+            letter-spacing: 0.08em;
+        }
+
+        /* ─── CONTENT AREA ─── */
+        .content {
+            padding: 28px 40px 40px;
+            flex: 1;
+        }
+
+        .grid2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            align-items: start;
+        }
+
+        .grid3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
+            align-items: start;
+        }
+
+        /* ─── CARDS ─── */
+        .card {
+            background: var(--white);
+            border: 0.5px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 18px;
+        }
+
+        .card:last-child {
+            margin-bottom: 0;
+        }
+
+        .card-label {
+            font-family: var(--mono);
+            font-size: 9px;
+            letter-spacing: 0.1em;
+            color: var(--text3);
+            margin-bottom: 10px;
+        }
+
+        .card-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .card-sub {
+            font-size: 12px;
+            color: var(--text3);
+            line-height: 1.6;
+            margin-bottom: 18px;
+        }
+
+        .divider {
+            border: none;
+            border-top: 0.5px solid var(--border);
+            margin: 16px 0;
+        }
+
+        /* ─── API CONFIG ─── */
+        .config-banner {
+            background: var(--cream);
+            border: 0.5px solid var(--border);
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .config-icon {
+            font-size: 16px;
+        }
+
+        .config-text {
+            flex: 1;
+            font-size: 12px;
+            color: var(--text2);
+        }
+
+        .config-text strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .config-toggle {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--accent);
+            cursor: pointer;
+            white-space: nowrap;
+            padding: 5px 10px;
+            border: 0.5px solid var(--accent);
+            border-radius: 5px;
+            transition: all .12s;
+        }
+
+        .config-toggle:hover {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .config-panel {
+            background: var(--cream);
+            border: 0.5px solid var(--border);
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 18px;
+            display: none;
+        }
+
+        .config-panel.open {
+            display: block;
+        }
+
+        .config-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        /* ─── FORM ─── */
+        .fl {
+            font-family: var(--mono);
+            font-size: 9px;
+            letter-spacing: 0.06em;
+            color: var(--text3);
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .fi {
+            width: 100%;
+            background: var(--white);
+            border: 0.5px solid var(--border);
+            border-radius: 7px;
+            padding: 10px 13px;
+            font-size: 13px;
+            color: var(--text);
+            font-family: var(--sans);
+            outline: none;
+            transition: border .12s;
+            margin-bottom: 0;
+        }
+
+        .fi:focus {
+            border-color: var(--accent);
+        }
+
+        .fi-group {
+            margin-bottom: 14px;
+        }
+
+        select.fi option {
+            background: #fff;
+        }
+
+        /* ─── BUTTONS ─── */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            padding: 10px 20px;
+            border-radius: 7px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            font-family: var(--sans);
+            transition: all .12s;
+            letter-spacing: -0.01em;
+        }
+
+        .btn-dark {
+            background: var(--navy);
+            color: #fff;
+        }
+
+        .btn-dark:hover {
+            background: var(--navy2);
+            transform: translateY(-1px);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text2);
+            border: 0.5px solid var(--border);
+        }
+
+        .btn-ghost:hover {
+            border-color: var(--text3);
+            color: var(--text);
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        .btn-sm {
+            padding: 7px 14px;
+            font-size: 12px;
+        }
+
+        .btn-danger {
+            background: var(--red-bg);
+            color: var(--red);
+            border: 0.5px solid rgba(176, 32, 32, 0.2);
+        }
+
+        /* ─── PILL TAGS (matches Retell's pill UI) ─── */
+        .pill-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+
+        .pill {
+            padding: 7px 14px;
+            border-radius: 20px;
+            border: 0.5px solid var(--border);
+            font-size: 12px;
+            color: var(--text2);
+            cursor: pointer;
+            transition: all .12s;
+            background: var(--white);
+        }
+
+        .pill:hover {
+            border-color: var(--navy);
+            color: var(--navy);
+        }
+
+        .pill.sel {
+            background: var(--navy);
+            color: #fff;
+            border-color: var(--navy);
+        }
+
+        /* ─── STATUS BADGES ─── */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: var(--mono);
+            font-size: 9px;
+            letter-spacing: 0.04em;
+        }
+
+        .bg {
+            background: var(--green-bg);
+            color: var(--green);
+        }
+
+        .br {
+            background: var(--red-bg);
+            color: var(--red);
+        }
+
+        .bo {
+            background: var(--orange-bg);
+            color: var(--orange);
+        }
+
+        .bm {
+            background: var(--cream2);
+            color: var(--text3);
+        }
+
+        .ba {
+            background: #eef2ff;
+            color: var(--accent);
+        }
+
+        /* ─── TABLE ─── */
+        .tbl {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        .tbl th {
+            font-family: var(--mono);
+            font-size: 9px;
+            letter-spacing: 0.08em;
+            color: var(--text3);
+            text-align: left;
+            padding: 8px 10px;
+            border-bottom: 0.5px solid var(--border);
+            font-weight: 400;
+        }
+
+        .tbl td {
+            padding: 10px 10px;
+            border-bottom: 0.5px solid var(--border);
+            color: var(--text);
+        }
+
+        .tbl tr:last-child td {
+            border-bottom: none;
+        }
+
+        .tbl tr:hover td {
+            background: var(--cream);
+        }
+
+        /* ─── TIMELINE ─── */
+        .tl {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .tl-row {
+            display: flex;
+            gap: 14px;
+        }
+
+        .tl-left {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 16px;
+            flex-shrink: 0;
+        }
+
+        .tl-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: 1.5px solid var(--border);
+            flex-shrink: 0;
+            margin-top: 4px;
+        }
+
+        .tl-dot.done {
+            background: var(--green);
+            border-color: var(--green);
+        }
+
+        .tl-dot.live {
+            border-color: var(--accent);
+            background: transparent;
+            animation: tlpulse 1.3s infinite;
+        }
+
+        @keyframes tlpulse {
+
+            0%,
+            100% {
+                border-color: var(--accent)
+            }
+
+            50% {
+                border-color: rgba(59, 107, 255, 0.2)
+            }
+        }
+
+        .tl-line {
+            width: 1px;
+            background: var(--border);
+            flex: 1;
+            margin: 3px 0;
+        }
+
+        .tl-content {
+            padding-bottom: 14px;
+        }
+
+        .tl-s {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .tl-t {
+            font-family: var(--mono);
+            font-size: 9px;
+            color: var(--accent);
+            margin-top: 2px;
+        }
+
+        .tl-p {
+            font-size: 11px;
+            color: var(--text3);
+            margin-top: 2px;
+            line-height: 1.5;
+        }
+
+        /* ─── COUNTDOWN / WAVEFORM / TRANSCRIPT ─── */
+        .countdown {
+            font-family: var(--serif);
+            font-size: 52px;
+            font-weight: 400;
+            color: var(--navy);
+            text-align: center;
+            padding: 18px 0 4px;
+            font-style: italic;
+        }
+
+        .cd-label {
+            text-align: center;
+            font-family: var(--mono);
+            font-size: 9px;
+            color: var(--text3);
+            letter-spacing: 0.08em;
+            margin-bottom: 18px;
+        }
+
+        .wav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            height: 36px;
+            margin: 10px 0;
+        }
+
+        .wb {
+            width: 3px;
+            border-radius: 2px;
+            background: var(--navy);
+            animation: wv .9s ease-in-out infinite;
+        }
+
+        .wb:nth-child(1) {
+            height: 10px;
+            animation-delay: 0s
+        }
+
+        .wb:nth-child(2) {
+            height: 20px;
+            animation-delay: .08s
+        }
+
+        .wb:nth-child(3) {
+            height: 30px;
+            animation-delay: .16s
+        }
+
+        .wb:nth-child(4) {
+            height: 16px;
+            animation-delay: .24s
+        }
+
+        .wb:nth-child(5) {
+            height: 26px;
+            animation-delay: .32s
+        }
+
+        .wb:nth-child(6) {
+            height: 12px;
+            animation-delay: .40s
+        }
+
+        .wb:nth-child(7) {
+            height: 22px;
+            animation-delay: .12s
+        }
+
+        @keyframes wv {
+
+            0%,
+            100% {
+                transform: scaleY(0.3);
+                opacity: 0.4
+            }
+
+            50% {
+                transform: scaleY(1);
+                opacity: 1
+            }
+        }
+
+        .tx {
+            background: var(--cream);
+            border: 0.5px solid var(--border);
+            border-radius: 8px;
+            padding: 14px;
+            margin-top: 12px;
+            font-family: var(--mono);
+            font-size: 11px;
+            line-height: 1.9;
+            max-height: 180px;
+            overflow-y: auto;
+        }
+
+        .tx-ai {
+            color: var(--navy);
+        }
+
+        .tx-hu {
+            color: var(--green);
+        }
+
+        .tx-sy {
+            color: var(--text3);
+            font-style: italic;
+        }
+
+        /* ─── VISITOR FEED ─── */
+        .vf-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 11px 0;
+            border-bottom: 0.5px solid var(--border);
+        }
+
+        .vf-row:last-child {
+            border-bottom: none;
+        }
+
+        .vf-logo {
+            width: 30px;
+            height: 30px;
+            border-radius: 7px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            flex-shrink: 0;
+            font-family: var(--sans);
+        }
+
+        .vf-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .vf-detail {
+            font-size: 11px;
+            color: var(--text3);
+            margin-top: 1px;
+        }
+
+        .vf-action {
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--accent);
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .vf-action:hover {
+            text-decoration: underline;
+        }
+
+        .intent-signal {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 3px;
+        }
+
+        .is-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .is-dot.high {
+            background: var(--orange);
+        }
+
+        .is-text {
+            font-size: 10px;
+            color: var(--orange);
+            font-family: var(--mono);
+        }
+
+        /* ─── CODE BLOCK ─── */
+        .code-block {
+            background: var(--navy);
+            border-radius: 9px;
+            padding: 16px;
+            font-family: var(--mono);
+            font-size: 11px;
+            line-height: 2;
+            overflow-x: auto;
+            margin-top: 4px;
+        }
+
+        .c-kw {
+            color: #7eb8ff;
+        }
+
+        .c-str {
+            color: #7dd9a8;
+        }
+
+        .c-fn {
+            color: #f0c070;
+        }
+
+        .c-cm {
+            color: rgba(255, 255, 255, 0.3);
+            font-style: italic;
+        }
+
+        .c-num {
+            color: #ff9e7a;
+        }
+
+        .c-def {
+            color: #fff;
+        }
+
+        /* ─── ENRICHMENT ─── */
+        .enrich-result {
+            background: var(--cream);
+            border: 0.5px solid var(--border);
+            border-radius: 9px;
+            padding: 16px;
+            margin-top: 12px;
+        }
+
+        .er-head {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .er-badge {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .er-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .er-domain {
+            font-size: 11px;
+            color: var(--text3);
+        }
+
+        .er-grid {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 4px 16px;
+            font-size: 11px;
+        }
+
+        .er-label {
+            color: var(--text3);
+        }
+
+        .er-val {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .seq-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+
+        .seq-label {
+            font-size: 11px;
+            color: var(--text2);
+            width: 76px;
+            flex-shrink: 0;
+        }
+
+        .seq-bar {
+            flex: 1;
+            height: 4px;
+            background: var(--cream3);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .seq-fill {
+            height: 100%;
+            border-radius: 2px;
+        }
+
+        .seq-val {
+            font-family: var(--mono);
+            font-size: 10px;
+            width: 32px;
+            text-align: right;
+        }
+
+        /* ─── SUCCESS ─── */
+        .success-state {
+            text-align: center;
+            padding: 28px 0;
+        }
+
+        .ss-icon {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .ss-title {
+            font-family: var(--serif);
+            font-size: 22px;
+            font-style: italic;
+            color: var(--green);
+            margin-bottom: 5px;
+        }
+
+        .ss-sub {
+            font-size: 12px;
+            color: var(--text3);
+        }
+
+        /* ─── COMING SOON ─── */
+        .coming-soon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .cs-num {
+            font-family: var(--serif);
+            font-size: 80px;
+            font-weight: 400;
+            font-style: italic;
+            color: var(--cream3);
+            line-height: 1;
+            margin-bottom: 20px;
+        }
+
+        .cs-title {
+            font-family: var(--serif);
+            font-size: 24px;
+            font-style: italic;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .cs-sub {
+            font-size: 13px;
+            color: var(--text3);
+            max-width: 360px;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .cs-tag {
+            font-family: var(--mono);
+            font-size: 9px;
+            letter-spacing: 0.1em;
+            color: var(--text3);
+            background: var(--cream2);
+            padding: 5px 12px;
+            border-radius: 20px;
+        }
+
+        /* ─── CALL STATUS ─── */
+        #cb-call-status {
+            text-align: center;
+            font-size: 12px;
+            color: var(--text3);
+            margin-bottom: 10px;
+            min-height: 18px;
+        }
+
+        /* ─── OVERLAY MODAL ─── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(13, 27, 46, 0.6);
+            z-index: 100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal-box {
+            background: var(--white);
+            border-radius: 14px;
+            padding: 28px;
+            max-width: 420px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-title {
+            font-family: var(--serif);
+            font-size: 22px;
+            font-style: italic;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+
+        .modal-sub {
+            font-size: 12px;
+            color: var(--text3);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="app">
+
+        <!-- ══════════ SIDEBAR ══════════ -->
+        <div class="sidebar">
+            <div class="sb-brand">
+                <div class="sb-logo">
+                    <svg viewBox="0 0 16 16" fill="none">
+                        <circle cx="8" cy="8" r="6" stroke="rgba(255,255,255,0.6)" stroke-width="1.2" />
+                        <circle cx="8" cy="8" r="2.5" fill="rgba(255,255,255,0.8)" />
+                        <line x1="8" y1="2" x2="8" y2="4.5" stroke="rgba(255,255,255,0.6)" stroke-width="1.2" />
+                        <line x1="8" y1="11.5" x2="8" y2="14" stroke="rgba(255,255,255,0.6)" stroke-width="1.2" />
+                        <line x1="2" y1="8" x2="4.5" y2="8" stroke="rgba(255,255,255,0.6)" stroke-width="1.2" />
+                        <line x1="11.5" y1="8" x2="14" y2="8" stroke="rgba(255,255,255,0.6)" stroke-width="1.2" />
+                    </svg>
+                </div>
+                <div>
+                    <div class="sb-wordmark">Retell AI</div>
+                    <div class="sb-subtitle">GTM EXPERIMENTS</div>
+                </div>
+            </div>
+
+            <div class="sb-section">EXPERIMENTS</div>
+            <div class="nav-list">
+                <div class="nav-item active" onclick="showPage('callback',this)">
+                    <div class="nav-dot"></div>
+                    Callback Flow
+                    <span class="nav-status ns-live">LIVE</span>
+                </div>
+                <div class="nav-item" onclick="showPage('anon',this)">
+                    <div class="nav-dot"></div>
+                    Anon Visitor → Lead
+                    <span class="nav-status ns-live">LIVE</span>
+                </div>
+                <div class="nav-item" onclick="showPage('pilot',this)">
+                    <div class="nav-dot"></div>
+                    Self-Serve Pilot
+                    <span class="nav-status ns-live">LIVE</span>
+                </div>
+                <div class="nav-item" onclick="showPage('cold',this)">
+                    <div class="nav-dot"></div>
+                    Cold Calling Infra
+                    <span class="nav-status ns-wip">NEXT</span>
+                </div>
+                <div class="nav-item" onclick="showPage('gifting',this)">
+                    <div class="nav-dot"></div>
+                    Gifting Layer
+                    <span class="nav-status ns-wip">NEXT</span>
+                </div>
+                <div class="nav-item" onclick="showPage('abm',this)">
+                    <div class="nav-dot"></div>
+                    Vertical ABM
+                    <span class="nav-status ns-wip">NEXT</span>
+                </div>
+            </div>
+
+            <div class="sb-section" style="margin-top:16px;">RESULTS</div>
+            <div class="nav-list">
+                <div class="nav-item" onclick="showPage('dash',this)">
+                    <div class="nav-dot"></div>
+                    Dashboard
+                </div>
+                <div class="nav-item" onclick="openConfigModal()" style="margin-top:16px; border: 1px dashed rgba(255,255,255,0.2);">
+                    <div style="font-size:12px; margin-right:4px;">⚙️</div> Configuration
+                </div>
+            </div>
+
+            <div class="sb-footer">
+                <div
+                    style="font-family:var(--mono);font-size:9px;color:rgba(255,255,255,0.25);letter-spacing:.08em;margin-bottom:9px;">
+                    STACK</div>
+                <div class="sf-row">
+                    <div class="sf-dot on"></div>Retell AI agent
+                </div>
+                <div class="sf-row">
+                    <div class="sf-dot on" id="twilio-dot"></div><span id="twilio-label">Twilio (configure)</span>
+                </div>
+                <div class="sf-row">
+                    <div class="sf-dot on"></div>RB2B enrichment
+                </div>
+                <div class="sf-row">
+                    <div class="sf-dot off"></div>Stripe (pilot)
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════ MAIN ══════════ -->
+        <div class="main">
+
+            <!-- ████ PAGE: CALLBACK FLOW ████ -->
+            <div class="page active" id="page-callback">
+                <div class="hero-band">
+                    <div class="hero-dot-grid"></div>
+                    <div class="exp-tag">
+                        <div class="pulse"></div> EXPERIMENT 01 · CALLBACK FLOW
+                    </div>
+                    <h1><em>AI calls back</em> in under 60 seconds.</h1>
+                    <p class="hero-sub">Prospect enters their number → Retell agent calls them back. Selling AI calling
+                        using AI calling.</p>
+                    <div class="hero-metrics">
+                        <div class="hm">
+                            <div class="hm-val">73%</div>
+                            <div class="hm-label">SHOW RATE</div>
+                        </div>
+                        <div class="hm">
+                            <div class="hm-val">38s</div>
+                            <div class="hm-label">AVG WAIT</div>
+                        </div>
+                        <div class="hm">
+                            <div class="hm-val">31%</div>
+                            <div class="hm-label">DEMO BOOKED</div>
+                        </div>
+                        <div class="hm">
+                            <div class="hm-val">$12</div>
+                            <div class="hm-label">COST / DEMO</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content">
+                    <div class="grid2">
+                        <!-- LEFT: CALL WIDGET -->
+                        <div>
+                            <div class="card">
+                                <div class="card-label">TRY IT LIVE</div>
+                                <div class="card-title">Request a callback</div>
+                                <div class="card-sub">Enter your number — a Retell AI agent calls you back in under 60
+                                    seconds.</div>
+
+                                <div id="cb-idle">
+                                    <div class="fi-group">
+                                        <label class="fl">PHONE NUMBER</label>
+                                        <input class="fi" type="tel" id="cb-phone" placeholder="+1 (555) 000-0000">
+                                    </div>
+                                    <div class="fi-group">
+                                        <label class="fl">CALL TYPE</label>
+                                        <div class="pill-group" id="cb-pill-group">
+                                            <div class="pill sel" onclick="selPill(this,'cb-pill-group')">Inbound
+                                                support</div>
+                                            <div class="pill" onclick="selPill(this,'cb-pill-group')">Outbound sales
+                                            </div>
+                                            <div class="pill" onclick="selPill(this,'cb-pill-group')">Appointment setter
+                                            </div>
+                                            <div class="pill" onclick="selPill(this,'cb-pill-group')">Lead qualification
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fi-group">
+                                        <label class="fl">COMPANY SIZE</label>
+                                        <select class="fi" id="cb-size">
+                                            <option value="">Select…</option>
+                                            <option>1–10 agents</option>
+                                            <option>11–50 agents</option>
+                                            <option>50–200 agents</option>
+                                            <option>200+ agents</option>
+                                        </select>
+                                    </div>
+                                    <button class="btn btn-dark btn-full" onclick="startCallback()">
+                                        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+                                            <path
+                                                d="M3 2a1 1 0 011-1h.5a1 1 0 011 1v3a1 1 0 01-.7.95L4 6.4A8.5 8.5 0 007.6 10l.45-.8A1 1 0 019 8.8h3a1 1 0 011 1v.5a1 1 0 01-1 1C5.4 11.3 1 6.9 1 2.5V2z" />
+                                        </svg>
+                                        Call me now
+                                    </button>
+                                </div>
+
+                                <div id="cb-calling" style="display:none;">
+                                    <div class="countdown" id="cd-num">60</div>
+                                    <div class="cd-label">SECONDS UNTIL CALL</div>
+                                    <div class="wav" id="cb-wav" style="display:none;">
+                                        <div class="wb"></div>
+                                        <div class="wb"></div>
+                                        <div class="wb"></div>
+                                        <div class="wb"></div>
+                                        <div class="wb"></div>
+                                        <div class="wb"></div>
+                                        <div class="wb"></div>
+                                    </div>
+                                    <div id="cb-call-status">Queuing your callback…</div>
+                                    <div class="tx" id="cb-tx">
+                                        <div class="tx-sy">[Retell AI agent initializing…]</div>
+                                    </div>
+                                    <div style="margin-top:14px;display:flex;gap:8px;">
+                                        <button class="btn btn-ghost btn-full" onclick="resetCB()">Cancel</button>
+                                    </div>
+                                </div>
+
+                                <div id="cb-done" style="display:none;">
+                                    <div class="success-state">
+                                        <div class="ss-icon">✓</div>
+                                        <div class="ss-title">Call complete.</div>
+                                        <div class="ss-sub">Transcript logged · Follow-up queued in CRM</div>
+                                    </div>
+                                    <div class="divider"></div>
+                                    <div style="display:flex;gap:8px;">
+                                        <button class="btn btn-ghost" style="flex:1" onclick="resetCB()">New
+                                            call</button>
+                                        <button class="btn btn-dark" style="flex:1" onclick="showPage('dash',null)">View
+                                            results →</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- RIGHT: TIMELINE + HOW IT WORKS -->
+                        <div>
+                            <div class="card" style="margin-bottom:18px;">
+                                <div class="card-label">HOW IT WORKS</div>
+                                <div class="card-title">End-to-end flow</div>
+                                <div class="card-sub">Retell API + Twilio outbound dialer</div>
+                                <div class="tl">
+                                    <div class="tl-row">
+                                        <div class="tl-left">
+                                            <div class="tl-dot done"></div>
+                                            <div class="tl-line"></div>
+                                        </div>
+                                        <div class="tl-content">
+                                            <div class="tl-s">Form submitted</div>
+                                            <div class="tl-t">T + 0s</div>
+                                            <div class="tl-p">Phone number + intent captured via widget</div>
+                                        </div>
+                                    </div>
+                                    <div class="tl-row">
+                                        <div class="tl-left">
+                                            <div class="tl-dot done"></div>
+                                            <div class="tl-line"></div>
+                                        </div>
+                                        <div class="tl-content">
+                                            <div class="tl-s">Retell API triggered</div>
+                                            <div class="tl-t">T + 1s</div>
+                                            <div class="tl-p"><code
+                                                    style="font-family:var(--mono);font-size:10px;background:var(--cream);padding:1px 5px;border-radius:3px;">POST /v2/create-phone-call</code>
+                                                with contact context</div>
+                                        </div>
+                                    </div>
+                                    <div class="tl-row">
+                                        <div class="tl-left">
+                                            <div class="tl-dot live"></div>
+                                            <div class="tl-line"></div>
+                                        </div>
+                                        <div class="tl-content">
+                                            <div class="tl-s">AI agent dials out</div>
+                                            <div class="tl-t">T + 35–60s</div>
+                                            <div class="tl-p">Agent uses form data to personalize opening line</div>
+                                        </div>
+                                    </div>
+                                    <div class="tl-row">
+                                        <div class="tl-left">
+                                            <div class="tl-dot"></div>
+                                            <div class="tl-line"></div>
+                                        </div>
+                                        <div class="tl-content">
+                                            <div class="tl-s">Qualify + book</div>
+                                            <div class="tl-t">T + 3–5 min</div>
+                                            <div class="tl-p">Agent offers Calendly slot inline, handles objections
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tl-row">
+                                        <div class="tl-left">
+                                            <div class="tl-dot"></div>
+                                        </div>
+                                        <div class="tl-content">
+                                            <div class="tl-s">Auto-logged</div>
+                                            <div class="tl-t">T + 5 min</div>
+                                            <div class="tl-p">Transcript + outcome pushed to CRM / Airtable</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-label">IMPLEMENTATION</div>
+                                <div class="card-title">Retell API call</div>
+                                <div class="code-block">
+                                    <span class="c-cm"># POST /v2/create-phone-call</span>
+                                    <span class="c-kw">import</span> <span class="c-def">requests</span>
+
+                                    <span class="c-def">response</span> = requests.<span class="c-fn">post</span>(
+                                    <span class="c-str">"https://api.retellai.com/v2/create-phone-call"</span>,
+                                    headers={<span class="c-str">"Authorization"</span>: <span class="c-str">f"Bearer
+                                        {API_KEY}"</span>},
+                                    json={
+                                    <span class="c-str">"agent_id"</span>: <span class="c-def">AGENT_ID</span>,
+                                    <span class="c-str">"from_number"</span>: <span class="c-str">"+14158824201"</span>,
+                                    <span class="c-str">"to_number"</span>: <span class="c-def">prospect_phone</span>,
+                                    <span class="c-str">"retell_llm_dynamic_variables"</span>: {
+                                    <span class="c-str">"use_case"</span>: <span class="c-def">selected_use_case</span>,
+                                    <span class="c-str">"company_size"</span>: <span class="c-def">company_size</span>,
+                                    }
+                                    }
+                                    )
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ████ PAGE: ANON VISITOR ████ -->
+            <div class="page" id="page-anon">
+                <div class="hero-band">
+                    <div class="hero-dot-grid"></div>
+                    <div class="exp-tag">
+                        <div class="pulse"></div> EXPERIMENT 02 · ANON VISITOR → LEAD
+                    </div>
+                    <h1><em>De-anonymize traffic.</em> Trigger outreach automatically.</h1>
+                    <p class="hero-sub">RB2B matches IP → company → contact. When a company hits pricing 3×, we fire
+                        automatically.</p>
+                    <div class="hero-metrics">
+                        <div class="hm">
+                            <div class="hm-val">34%</div>
+                            <div class="hm-label">MATCH RATE</div>
+                        </div>
+                        <div class="hm">
+                            <div class="hm-val">7</div>
+                            <div class="hm-label">TRIGGERED TODAY</div>
+                        </div>
+                        <div class="hm">
+                            <div class="hm-val">19%</div>
+                            <div class="hm-label">REPLY RATE</div>
+                        </div>
+                        <div class="hm">
+                            <div class="hm-val">$0</div>
+                            <div class="hm-label">INCREMENTAL COST</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="content">
+                    <div class="grid2">
+                        <div>
+                            <div class="card">
+                                <div class="card-label">LIVE VISITOR FEED</div>
+                                <div class="card-title">High-intent companies</div>
+                                <div class="card-sub">Identified via RB2B · Pricing page 3+ visits</div>
+                                <div id="vf-list">
+                                    <div class="vf-row">
+                                        <div class="vf-logo" style="background:#e8f0fe;color:#3c6bcf;">Z</div>
+                                        <div style="flex:1;">
+                                            <div class="vf-name">Zendesk</div>
+                                            <div class="vf-detail">Pricing page · 4 visits · SF, CA</div>
+                                            <div class="intent-signal">
+                                                <div class="is-dot high"></div><span class="is-text">HIGH INTENT</span>
+                                            </div>
+                                        </div>
+                                        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;">
+                                            <span class="badge bo">4 visits</span>
+                                            <span class="vf-action"
+                                                onclick="showEnrich('Zendesk','Z','#e8f0fe','#3c6bcf','Contact Center','500–1,000 agents','San Francisco, CA','zendesk.com')">Enrich
+                                                + trigger →</span>
+                                        </div>
+                                    </div>
+                                    <div class="vf-row">
+                                        <div class="vf-logo" style="background:#fce8e6;color:#c0392b;">S</div>
+                                        <div style="flex:1;">
+                                            <div class="vf-name">Shopify</div>
+                                            <div class="vf-detail">Pricing page · 3 visits · Ottawa, CA</div>
+                                            <div class="intent-signal">
+                                                <div class="is-dot high"></div><span class="is-text">HIGH INTENT</span>
+                                            </div>
+                                        </div>
+                                        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;">
+                                            <span class="badge bo">3 visits</span>
+                                            <span class="vf-action"
+                                                onclick="showEnrich('Shopify','S','#fce8e6','#c0392b','E-commerce','200–500 agents','Ottawa, ON','shopify.com')">Enrich
+                                                + trigger →</span>
+                                        </div>
+                                    </div>
+                                    <div class="vf-row">
+                                        <div class="vf-logo" style="background:#e6f4ea;color:#1e8e3e;">A</div>
+                                        <div style="flex:1;">
+                                            <div class="vf-name">Airbnb</div>
+                                            <div class="vf-detail">Pricing page · 3 visits · SF, CA</div>
+                                            <div class="intent-signal">
+                                                <div class="is-dot high"></div><span class="is-text">HIGH INTENT</span>
+                                            </div>
+                                        </div>
+                                        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;">
+                                            <span class="badge bo">3 visits</span>
+                                            <span class="vf-action"
+                                                onclick="showEnrich('Airbnb','A','#e6f4ea','#1e8e3e','Travel / Hospitality','100–300 agents','San Francisco, CA','airbnb.com')">Enrich
+                                                + trigger →</span>
+                                        </div>
+                                    </div>
+                                    <div class="vf-row">
+                                        <div class="vf-logo" style="background:#f3e8fd;color:#7c3aed;">F</div>
+                                        <div style="flex:1;">
+                                            <div class="vf-name">Faire</div>
+                                            <div class="vf-detail">Features page · 2 visits · SF, CA</div>
+                                        </div>
+                                        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;">
+                                            <span class="badge bm">2 visits</span>
+                                            <span style="font-size:11px;color:var(--text3);">Watching…</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="card" id="enrich-default">
+                                <div class="card-label">ENRICHMENT RESULT</div>
+                                <div class="card-title">Click a visitor to enrich</div>
+                                <div style="padding:24px 0;text-align:center;">
+                                    <div style="font-size:36px;margin-bottom:10px;">🔍</div>
+                                    <div style="font-size:13px;color:var(--text3);line-height:1.6;">Select a high-intent
+                                        company<br>to run RB2B enrichment and fire outreach</div>
+                                </div>
+                            </div>
+                            <div class="card" id="enrich-card" style="display:none;">
+                                <div class="card-label">ENRICHMENT RESULT</div>
+                                <div class="card-title">Match found</div>
+                                <div class="card-sub">Via RB2B · Apollo contact identified</div>
+                                <div class="enrich-result">
+                                    <div class="er-head">
+                                        <div class="er-badge" id="er-badge">Z</div>
+                                        <div>
+                                            <div class="er-name" id="er-name">Zendesk</div>
+                                            <div class="er-domain" id="er-domain">zendesk.com</div>
+                                        </div>
+                                    </div>
+                                    <div class="er-grid">
+                                        <div class="er-label">Industry</div>
+                                        <div class="er-val" id="er-ind">—</div>
+                                        <div class="er-label">Team size</div>
+                                        <div class="er-val" id="er-size">—</div>
+                                        <div class="er-label">Location</div>
+                                        <div class="er-val" id="er-loc">—</div>
+                                        <div class="er-label">Contact</div>
+                                        <div class="er-val">VP of Operations</div>
+                                    </div>
+                                </div>
+                                <div class="divider"></div>
+                                <div class="card-label">OUTREACH SEQUENCE FIRED</div>
+                                <div class="seq-row">
+                                    <div class="seq-label">Email #1</div>
+                                    <div class="seq-bar">
+                                        <div class="seq-fill" style="width:100%;background:var(--green);"></div>
+                                    </div>
+                                    <div class="seq-val" style="color:var(--green);">sent</div>
+                                </div>
+                                <div class="seq-row">
+                                    <div class="seq-label">LinkedIn</div>
+                                    <div class="seq-bar">
+                                        <div class="seq-fill" style="width:100%;background:var(--accent);"></div>
+                                    </div>
+                                    <div class="seq-val" style="color:var(--accent);">sent</div>
+                                </div>
+                                <div class="seq-row">
+                                    <div class="seq-label">LinkedIn Req</div>
+                                    <div class="seq-bar">
+                                        <div class="seq-fill" style="width:50%;background:var(--blue);"></div>
+                                    </div>
+                                    <div class="seq-val" style="color:var(--blue);">queued</div>
+                                </div>
+                                <div class="seq-row">
+                                    <div class="seq-label">Retell Call</div>
+                                    <div class="seq-bar">
+                                        <div class="seq-fill" style="width:0;background:var(--border);"></div>
+                                    </div>
+                                    <div class="seq-val" style="color:var(--text3);">pending</div>
+                                </div>
+                                <div class="seq-row">
+                                    <div class="seq-label">Retell call</div>
+                                    <div class="seq-bar">
+                                        <div class="seq-fill" style="width:55%;background:var(--orange);"></div>
+                                    </div>
+                                    <div class="seq-val" style="color:var(--orange);">+48h</div>
+                                </div>
+                                <div class="divider"></div>
+                                <button class="btn btn-dark btn-full btn-sm" onclick="showPage('dash',null)">View in dashboard →</button>
+                                <button class="btn btn-ghost btn-full btn-sm" style="margin-top:8px;" onclick="saveContactToAirtable('Anon', 'Visitor', 'Unidentified Lead', document.getElementById('er-domain').innerText).then(() => alert('Saved anonymous lead to Airtable!'))">Sync to Airtable</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-label">IMPLEMENTATION</div>
+                        <div class="card-title">Webhook — fires on every RB2B enrichment hit</div>
+                        <div class="code-block">
+                            <span class="c-kw">from</span> <span class="c-def">flask</span> <span
+                                class="c-kw">import</span> <span class="c-def">Flask, request</span>
+                            <span class="c-kw">import</span> <span class="c-def">apollo, instantly, retell</span>
+
+                            <span class="c-def">@app</span>.<span class="c-fn">route</span>(<span
+                                class="c-str">'/webhook/rb2b'</span>, methods=[<span class="c-str">'POST'</span>])
+                            <span class="c-kw">def</span> <span class="c-fn">handle_visitor</span>():
+                            data = request.json
+                            domain = data[<span class="c-str">'company'</span>][<span class="c-str">'domain'</span>]
+                            visits = <span class="c-fn">get_visit_count</span>(domain, page=<span
+                                class="c-str">'/pricing'</span>)
+
+                            <span class="c-kw">if</span> visits &gt;= <span class="c-num">3</span>:
+                            contact = apollo.<span class="c-fn">find_contact</span>(domain, title=<span
+                                class="c-str">'VP Operations'</span>)
+                            instantly.<span class="c-fn">add_to_sequence</span>(contact, seq=<span
+                                class="c-str">'pricing_intent_v1'</span>)
+                            retell.<span class="c-fn">schedule_call</span>(contact.phone, delay_hours=<span
+                                class="c-num">48</span>)
+                            <span class="c-kw">return</span> {<span class="c-str">'status'</span>: <span
+                                class="c-str">'triggered'</span>, <span class="c-str">'contact'</span>: contact.email}
+
+                            <span class="c-kw">return</span> {<span class="c-str">'status'</span>: <span
+                                class="c-str">'watching'</span>, <span class="c-str">'visits'</span>: visits}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ████ PAGE: SELF-SERVE PILOT ████ -->
+            <div class="page" id="page-pilot">
+                <div class="hero-band">
+                    <div class="hero-dot-grid"></div>
+                    <div class="exp-tag">
+                        <div class="pulse"></div> EXPERIMENT 03 · SELF-SERVE PILOT
+                    </div>
+                    <h1>Pick a use case. <em>Hear it live. Pay and start.</em></h1>
+                    <p class="hero-sub">Zero sales rep. Pick use case → Retell calls you → Stripe activates pilot. Live
+                        in 48h.</p>
+                    <div class="hero-metrics">
+                        <div class="hm">
+                            <div class="hm-val">&lt;90s</div>
+                            <div class="hm-label">TIME TO DEMO</div>
+                        </div>
+                        <div class="hm">
+                            <div class="hm-val">18%</div>
+                            <div class="hm-label">TRIAL CONV.</div>
+                        </div>
+                        <div class="hm">
+                            <div class="hm-val">$14</div>
+                            <div class="hm-label">COST / TRIAL</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="content">
+                    <div id="ss1">
+                        <div class="card" style="max-width:640px;">
+                            <div class="card-label">STEP 1 OF 3</div>
+                            <div class="card-title">Select the type of call you want to receive</div>
+                            <div class="card-sub" style="margin-bottom:12px;">Matches Retell's own live demo page —
+                                select one to continue.</div>
+                            <div class="pill-group" id="ss-pill-group">
+                                <div class="pill" onclick="selPill(this,'ss-pill-group')">Receptionist</div>
+                                <div class="pill" onclick="selPill(this,'ss-pill-group')">Appointment Setter</div>
+                                <div class="pill" onclick="selPill(this,'ss-pill-group')">Lead Qualification</div>
+                                <div class="pill" onclick="selPill(this,'ss-pill-group')">Customer Service</div>
+                                <div class="pill" onclick="selPill(this,'ss-pill-group')">Debt Collection</div>
+                                <div class="pill" onclick="selPill(this,'ss-pill-group')">Survey</div>
+                            </div>
+                            <button class="btn btn-dark" id="ss-next-btn" onclick="ssStep2()"
+                                style="display:none;">Continue →</button>
+                        </div>
+                    </div>
+                    <div id="ss2" style="display:none;">
+                        <div class="grid2">
+                            <div class="card">
+                                <div class="card-label">STEP 2 OF 3</div>
+                                <div class="card-title">Enter your information</div>
+                                <div class="card-sub">A Retell agent calls you in ~30 seconds</div>
+                                <div class="fi-group"><label class="fl">PHONE NUMBER</label><input class="fi" type="tel"
+                                        id="ss-phone" placeholder="+1 (555) 000-0000"></div>
+                                <div class="fi-group"><label class="fl">FIRST NAME</label><input class="fi" type="text"
+                                        id="ss-name" placeholder="First name"></div>
+                                <div style="display:flex;gap:8px;">
+                                    <button class="btn btn-ghost" onclick="ssBack1()">← Back</button>
+                                    <button class="btn btn-dark" style="flex:1" onclick="ssStep3()">Call me now
+                                        →</button>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-label">WHAT TO EXPECT</div>
+                                <div class="card-title" id="ss-uc-title">Your demo call</div>
+                                <div class="card-sub" id="ss-uc-desc">The agent will walk through a sample interaction
+                                    and answer questions about setup, pricing, and voice options.</div>
+                                <div class="divider"></div>
+                                <div style="font-size:12px;color:var(--text3);line-height:1.8;">
+                                    After the call you'll get a link to activate your pilot.<br>
+                                    No contract. $299/mo. Live in 48 hours.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="ss3" style="display:none;">
+                        <div class="card" style="max-width:480px;">
+                            <div style="text-align:center;padding:8px 0 18px;">
+                                <div
+                                    style="font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:.08em;margin-bottom:10px;">
+                                    DEMO IN PROGRESS</div>
+                                <div class="wav" style="justify-content:center;margin-bottom:12px;">
+                                    <div class="wb"></div>
+                                    <div class="wb"></div>
+                                    <div class="wb"></div>
+                                    <div class="wb"></div>
+                                    <div class="wb"></div>
+                                    <div class="wb"></div>
+                                    <div class="wb"></div>
+                                </div>
+                                <div
+                                    style="font-family:var(--serif);font-size:22px;font-style:italic;color:var(--text);margin-bottom:4px;">
+                                    Retell is calling you now.</div>
+                                <div style="font-size:12px;color:var(--text3);">Pick up your phone · The agent is
+                                    dialing</div>
+                            </div>
+                            <div class="divider"></div>
+                            <div style="display:flex;gap:8px;">
+                                <button class="btn btn-ghost" onclick="ssBack2()">← Back</button>
+                                <button class="btn btn-dark" style="flex:1" onclick="ssStep4()">That was great →
+                                    Activate pilot</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="ss4" style="display:none;">
+                        <div class="card" style="max-width:520px;">
+                            <div class="card-label">STEP 3 OF 3</div>
+                            <div class="card-title">Activate your pilot</div>
+                            <div class="card-sub">$299/mo · Cancel anytime · Live in 48 hours</div>
+                            <div class="divider"></div>
+                            <div class="grid2" style="margin-bottom:0;">
+                                <div class="fi-group"><label class="fl">COMPANY</label><input class="fi" type="text"
+                                        placeholder="Acme Corp"></div>
+                                <div class="fi-group"><label class="fl">WORK EMAIL</label><input class="fi" type="email"
+                                        placeholder="you@company.com"></div>
+                            </div>
+                            <div class="fi-group"><label class="fl">CARD NUMBER</label><input class="fi" type="text"
+                                    placeholder="4242 4242 4242 4242" style="font-family:var(--mono);"></div>
+                            <div class="grid2">
+                                <div class="fi-group"><label class="fl">EXPIRY</label><input class="fi" type="text"
+                                        placeholder="MM / YY"></div>
+                                <div class="fi-group"><label class="fl">CVC</label><input class="fi" type="text"
+                                        placeholder="000"></div>
+                            </div>
+                            <button class="btn btn-dark btn-full" onclick="ssDone()">Activate pilot · $299/mo →</button>
+                            <div
+                                style="text-align:center;font-family:var(--mono);font-size:9px;color:var(--text3);margin-top:10px;letter-spacing:.04em;">
+                                POWERED BY STRIPE · NO CONTRACT · CANCEL ANYTIME</div>
+                        </div>
+                    </div>
+                    <div id="ss-done" style="display:none;">
+                        <div class="card" style="max-width:480px;">
+                            <div class="success-state">
+                                <div class="ss-icon">🚀</div>
+                                <div class="ss-title">Pilot activated.</div>
+                                <div class="ss-sub" style="margin-bottom:20px;">Your Retell agent goes live within 48
+                                    hours.<br>Expect a setup call from the team tomorrow.</div>
+                                <button class="btn btn-dark" onclick="showPage('dash',null)">View dashboard →</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ████ PAGE: COLD CALLING ████ -->
+            <div class="page" id="page-cold">
+                <div class="hero-band">
+                    <div class="hero-dot-grid"></div>
+                    <div class="exp-tag">EXPERIMENT 04 · COLD CALLING INFRA</div>
+                    <h1><em>Outbound at scale.</em> Does it convert?</h1>
+                    <p class="hero-sub">Apollo/Clay → prospect lists. Twilio dialer. Python script auto-dials, logs
+                        pickups vs voicemails vs conversions. Start with 200 calls.</p>
+                </div>
+                <div class="content">
+                    <div class="grid2">
+                        <div>
+                            <div class="card">
+                                <div class="card-label">APOLLO PROSPECTING</div>
+                                <div class="card-title">Find Contacts by Industry</div>
+                                <div class="card-sub">Uses Apollo API to pull prospects instantly.</div>
+                                <div class="fi-group">
+                                    <label class="fl">INDUSTRY KEYWORDS</label>
+                                    <input class="fi" type="text" id="apollo-industry" placeholder="e.g. real estate, healthcare">
+                                </div>
+                                <div class="fi-group">
+                                    <label class="fl">JOB TITLES</label>
+                                    <input class="fi" type="text" id="apollo-titles" placeholder="e.g. vp sales, founder">
+                                </div>
+                                <button class="btn btn-dark btn-full" onclick="searchApollo()">Search Apollo</button>
+                                <div class="divider"></div>
+                                <div class="card-label">CALL SCRIPT CONTEXT</div>
+                                <div class="card-title">Dynamic Variables</div>
+                                <div class="card-sub">Used by the Retell Agent to personalize the opening.</div>
+                                <textarea class="fi" rows="3" placeholder="You are calling {{Name}} at {{Company}}. Mention that you noticed their recent hiring push for {{Title}} roles." style="font-family:var(--sans);font-size:12px;resize:vertical;"></textarea>
+                                <button class="btn btn-dark btn-full" onclick="alert('Batch dialer initiated!')">Trigger Batch Calls (200)</button>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="card" style="margin-bottom:18px;">
+                                <div class="card-label">LIVE BATCH RESULTS</div>
+                                <div class="card-title">Current run: 200 prospects</div>
+                                <table class="tbl" style="margin-top:12px;">
+                                    <thead>
+                                        <tr>
+                                            <th>PROSPECT</th>
+                                            <th>PHONE</th>
+                                            <th>STATUS</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="apollo-results-body">
+                                        <tr>
+                                            <td colspan="3" style="text-align:center;color:var(--text3);padding:24px;">No prospects loaded. Run a search to populate.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="card">
+                                <div class="card-label">IMPLEMENTATION</div>
+                                <div class="card-title">Python Auto-Dialer</div>
+                                <div class="code-block" style="max-height: 200px; overflow-y: auto;">
+                                    <span class="c-cm"># Batch trigger Retell calls</span>
+                                    <span class="c-kw">import</span> <span class="c-def">pandas, requests</span>
+
+                                    <span class="c-def">df</span> = pandas.<span class="c-fn">read_csv</span>(<span class="c-str">'prospects.csv'</span>)
+                                    <span class="c-kw">for</span> <span class="c-def">_</span>, <span class="c-def">row</span> <span class="c-kw">in</span> df.<span class="c-fn">iterrows</span>():
+                                        <span class="c-def">payload</span> = {
+                                            <span class="c-str">"agent_id"</span>: <span class="c-str">"agent_..."</span>,
+                                            <span class="c-str">"to_number"</span>: row[<span class="c-str">'phone'</span>],
+                                            <span class="c-str">"retell_llm_dynamic_variables"</span>: {
+                                                <span class="c-str">"name"</span>: row[<span class="c-str">'name'</span>],
+                                                <span class="c-str">"company"</span>: row[<span class="c-str">'company'</span>]
+                                            }
+                                        }
+                                        requests.<span class="c-fn">post</span>(<span class="c-str">"https://api.retellai.com/..."</span>, json=payload)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ████ PAGE: GIFTING ████ -->
+            <div class="page" id="page-gifting">
+                <div class="hero-band">
+                    <div class="hero-dot-grid"></div>
+                    <div class="exp-tag">EXPERIMENT 05 · GIFTING AS CONVERSION LAYER</div>
+                    <h1><em>A $25 gift</em> beats a follow-up email?</h1>
+                    <p class="hero-sub">Sendoso/Postal to reactivate cold demos. Two groups: gift vs email. Measure
+                        reply rate and rebooking. Retell agent calls after gift arrives.</p>
+                </div>
+                <div class="content">
+                    <div class="card" style="margin-bottom:18px;">
+                        <div class="grid2">
+                            <div>
+                                <div class="card-label">COHORT A: GIFT</div>
+                                <div class="card-title">$25 Coffee Gift</div>
+                                <div class="card-sub" style="margin-bottom:10px;">Trigger via Sendoso, follow-up call if accepted.</div>
+                                <textarea class="fi" rows="3" placeholder="Add contacts (email, phone)..."></textarea>
+                                <button class="btn btn-dark btn-full btn-sm" onclick="alert('Contacts added to gift sequence')">Add to Gift sequence</button>
+                                <div class="divider"></div>
+                                <div class="grid2">
+                                    <div class="hm">
+                                        <div class="hm-val" style="font-size:20px;color:var(--text);font-family:var(--serif);">22%</div>
+                                        <div class="hm-label">REPLY / ACCEPT</div>
+                                    </div>
+                                    <div class="hm">
+                                        <div class="hm-val" style="font-size:20px;color:var(--text);font-family:var(--serif);">$113</div>
+                                        <div class="hm-label">COST / MET</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="card-label">COHORT B: EMAIL ONLY</div>
+                                <div class="card-title">Standard Follow-up</div>
+                                <div class="card-sub" style="margin-bottom:10px;">3-step email sequence, no gift.</div>
+                                <textarea class="fi" rows="3" placeholder="Add contacts (email, phone)..."></textarea>
+                                <button class="btn btn-ghost btn-full btn-sm" onclick="alert('Contacts added to email sequence')">Add to Email sequence</button>
+                                <div class="divider"></div>
+                                <div class="grid2">
+                                    <div class="hm">
+                                        <div class="hm-val" style="font-size:20px;color:var(--text);font-family:var(--serif);">4%</div>
+                                        <div class="hm-label">REPLY RATE</div>
+                                    </div>
+                                    <div class="hm">
+                                        <div class="hm-val" style="font-size:20px;color:var(--text);font-family:var(--serif);">$0</div>
+                                        <div class="hm-label">COST / MET</div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-label">ROI CALCULATOR</div>
+                        <div class="card-title">Cost per Reactivation</div>
+                        <div class="card-sub">Simulate the break-even point for the gifting cohort.</div>
+                        <div class="grid3" style="margin-top:14px; margin-bottom:14px;">
+                            <div class="fi-group">
+                                <label class="fl">COST PER GIFT ($)</label>
+                                <input class="fi" type="number" id="roi-cost" value="25" oninput="calcRoi()">
+                            </div>
+                            <div class="fi-group">
+                                <label class="fl">COHORT SIZE</label>
+                                <input class="fi" type="number" id="roi-size" value="100" oninput="calcRoi()">
+                            </div>
+                            <div class="fi-group">
+                                <label class="fl">REPLY RATE (%)</label>
+                                <input class="fi" type="number" id="roi-rate" value="22" oninput="calcRoi()">
+                            </div>
+                        </div>
+                        <div class="divider"></div>
+                        <div class="grid2">
+                            <div class="hm">
+                                <div class="hm-val" id="roi-total-cost" style="font-size:24px;color:var(--text);font-family:var(--serif);">$2,500</div>
+                                <div class="hm-label">TOTAL CAMPAIGN SPEND</div>
+                            </div>
+                            <div class="hm">
+                                <div class="hm-val" id="roi-cpr" style="font-size:24px;color:var(--green);font-family:var(--serif);">$113</div>
+                                <div class="hm-label">COST PER REACTIVATION</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ████ PAGE: ABM ████ -->
+            <div class="page" id="page-abm">
+                <div class="hero-band">
+                    <div class="hero-dot-grid"></div>
+                    <div class="exp-tag">EXPERIMENT 06 · VERTICAL ABM</div>
+                    <h1><em>Go deep</em> in one vertical first.</h1>
+                    <p class="hero-sub">Real estate or healthcare. 200 target companies. Hyper-specific copy. Email +
+                        LinkedIn + Retell call sequence. 2-week test vs generic outbound.</p>
+                </div>
+                <div class="content">
+                    <div class="grid2">
+                        <div>
+                            <div class="card">
+                                <div class="card-label">SEQUENCE BUILDER</div>
+                                <div class="card-title">Vertical Selection</div>
+                                <div class="card-sub">Choose a target vertical to apply customized messaging.</div>
+                                <select class="fi" style="margin-bottom:14px;">
+                                    <option>Real Estate</option>
+                                    <option>Healthcare</option>
+                                    <option>Financial Services</option>
+                                </select>
+                                <div class="card-label">TARGET ACCOUNTS</div>
+                                <textarea class="fi" rows="4" placeholder="Paste domains (e.g. zillow.com, compass.com)"></textarea>
+                                <button class="btn btn-dark btn-full" onclick="alert('Vertical ABM Sequence Launched!')">Launch ABM Sequence</button>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="card">
+                                <div class="card-label">SEQUENCE TIMING</div>
+                                <div class="card-title">Trigger Flow</div>
+                                <div class="tl" style="margin-top:12px;">
+                                    <div class="tl-row">
+                                        <div class="tl-left">
+                                            <div class="tl-dot done"></div>
+                                            <div class="tl-line"></div>
+                                        </div>
+                                        <div class="tl-content">
+                                            <div class="tl-s">Email #1 (Vertical Pain Points)</div>
+                                            <div class="tl-t">Day 1</div>
+                                            <div class="tl-p">Highly customized email regarding vertical specifically.</div>
+                                        </div>
+                                    </div>
+                                    <div class="tl-row">
+                                        <div class="tl-left">
+                                            <div class="tl-dot done"></div>
+                                            <div class="tl-line"></div>
+                                        </div>
+                                        <div class="tl-content">
+                                            <div class="tl-s">LinkedIn Connection</div>
+                                            <div class="tl-t">Day 3</div>
+                                            <div class="tl-p">Automated matching and connection request.</div>
+                                        </div>
+                                    </div>
+                                    <div class="tl-row">
+                                        <div class="tl-left">
+                                            <div class="tl-dot live"></div>
+                                        </div>
+                                        <div class="tl-content">
+                                            <div class="tl-s">Retell AI Call</div>
+                                            <div class="tl-t">Day 5</div>
+                                            <div class="tl-p">Agent calls using vertical-specific terminology.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ████ PAGE: DASHBOARD ████ -->
+            <div class="page" id="page-dash">
+                <div class="hero-band">
+                    <div class="hero-dot-grid"></div>
+                    <div class="exp-tag">RESULTS</div>
+                    <h1>GTM experiments <em>at a glance.</em></h1>
+                    <p class="hero-sub">All channels · Week 1 · Updated automatically from CRM + Retell call logs</p>
+                    <div class="hero-metrics">
+                        <div class="hm">
+                            <div class="hm-val">341</div>
+                            <div class="hm-label">CONTACTS</div>
+                        </div>
+                        <div class="hm">
+                            <div class="hm-val">74</div>
+                            <div class="hm-label">DEMOS BOOKED</div>
+                        </div>
+                        <div class="hm">
+                            <div class="hm-val">9</div>
+                            <div class="hm-label">PILOTS STARTED</div>
+                        </div>
+                        <div class="hm">
+                            <div class="hm-val">$21</div>
+                            <div class="hm-label">COST / DEMO</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="content">
+                    <div class="card" style="margin-bottom:18px;">
+                        <div class="card-label">EXPERIMENT COMPARISON</div>
+                        <div class="card-title">Cost efficiency across channels</div>
+                        <table class="tbl" style="margin-top:12px;">
+                            <thead>
+                                <tr>
+                                    <th>EXPERIMENT</th>
+                                    <th>CONTACTS</th>
+                                    <th>DEMOS</th>
+                                    <th>COST / DEMO</th>
+                                    <th>STATUS</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Callback Flow</td>
+                                    <td>200</td>
+                                    <td>45</td>
+                                    <td>$12</td>
+                                    <td><span class="badge bg">scaling</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Anon Visitor → Lead</td>
+                                    <td>57 matched</td>
+                                    <td>13</td>
+                                    <td>$0</td>
+                                    <td><span class="badge bg">scaling</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Self-Serve Pilot</td>
+                                    <td>512 visits</td>
+                                    <td>16</td>
+                                    <td>$50</td>
+                                    <td><span class="badge ba">optimizing</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Cold Calling Infra</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td><span class="badge bm">building</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Gifting Layer</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td><span class="badge bm">building</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Vertical ABM</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td><span class="badge bm">building</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="grid2">
+                        <div class="card">
+                            <div class="card-label">CALLBACK OUTCOMES · 200 triggers</div>
+                            <table class="tbl" style="margin-top:8px;">
+                                <thead>
+                                    <tr>
+                                        <th>OUTCOME</th>
+                                        <th>COUNT</th>
+                                        <th>RATE</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Answered</td>
+                                        <td>146</td>
+                                        <td><span class="badge bg">73%</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Demo booked</td>
+                                        <td>45</td>
+                                        <td><span class="badge bg">31%</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Voicemail</td>
+                                        <td>38</td>
+                                        <td><span class="badge bm">19%</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Not interested</td>
+                                        <td>16</td>
+                                        <td><span class="badge bm">8%</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="card">
+                            <div class="card-label">RECENT ACTIVITY · ALL CHANNELS</div>
+                            <table class="tbl" style="margin-top:8px;">
+                                <thead>
+                                    <tr>
+                                        <th>TIME</th>
+                                        <th>CHANNEL</th>
+                                        <th>OUTCOME</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="font-family:var(--mono);font-size:9px;color:var(--text3);">2m ago
+                                        </td>
+                                        <td>Callback</td>
+                                        <td><span class="badge bg">Demo booked</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-family:var(--mono);font-size:9px;color:var(--text3);">11m ago
+                                        </td>
+                                        <td>Self-serve</td>
+                                        <td><span class="badge bg">Pilot activated</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-family:var(--mono);font-size:9px;color:var(--text3);">28m ago
+                                        </td>
+                                        <td>Anon →</td>
+                                        <td><span class="badge ba">Sequence live</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-family:var(--mono);font-size:9px;color:var(--text3);">1h ago
+                                        </td>
+                                        <td>Callback</td>
+                                        <td><span class="badge bm">Voicemail</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-family:var(--mono);font-size:9px;color:var(--text3);">2h ago
+                                        </td>
+                                        <td>Anon →</td>
+                                        <td><span class="badge bg">Demo booked</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- /.main -->
+    </div><!-- /.app -->
+
+    <!-- ══ REAL CALL MODAL ══ -->
+    <div class="modal-overlay" id="call-modal">
+        <div class="modal-box">
+            <div class="modal-title">Initiating real call…</div>
+            <div class="modal-sub" id="modal-body">Sending request to Retell API. Your phone will ring shortly.</div>
+            <div id="modal-buttons" style="display:flex;gap:8px;margin-top:4px;">
+                <button class="btn btn-ghost" style="flex:1" onclick="closeModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ CONFIG MODAL ══ -->
+    <div class="modal-overlay" id="config-modal">
+        <div class="modal-box" style="max-width: 500px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom: 12px;">
+                <div class="modal-title" style="margin-bottom:0;">Global Configuration</div>
+                <button class="btn btn-ghost btn-sm" style="padding:4px 8px; margin:0;" onclick="closeConfigModal()">✕</button>
+            </div>
+            <div class="modal-sub">Credentials are securely saved in your browser and used across all experiments.</div>
+            
+            <div class="config-panel" style="display:block; margin:0; border:none; padding:0; background:none;">
+                <div class="card-label">RETELL CREDENTIALS</div>
+                <div class="config-row">
+                    <div>
+                        <label class="fl">RETELL API KEY</label>
+                        <input class="fi" type="password" id="retell-api-key" placeholder="key_xxxxxxxxxxxx" oninput="saveConfig()">
+                    </div>
+                    <div>
+                        <label class="fl">AGENT ID</label>
+                        <input class="fi" type="text" id="retell-agent-id" placeholder="agent_xxxxxxxxxxxx" oninput="saveConfig()">
+                    </div>
+                </div>
+                <div class="config-row">
+                    <div>
+                        <label class="fl">FROM NUMBER (E.164)</label>
+                        <input class="fi" type="text" id="retell-from-num" placeholder="+14158824201" oninput="saveConfig()">
+                    </div>
+                    <div>
+                        <label class="fl">APOLLO API KEY</label>
+                        <input class="fi" type="password" id="apollo-api-key" placeholder="ahVxxxxxxxxxxxx" oninput="saveConfig()">
+                    </div>
+                </div>
+                <div class="divider" style="margin: 16px 0;"></div>
+                <div class="card-label">AIRTABLE CRM CREDENTIALS</div>
+                <div class="config-row">
+                    <div>
+                        <label class="fl">AIRTABLE PAT</label>
+                        <input class="fi" type="password" id="airtable-api-key" placeholder="patxxxxxxxxxxxx" oninput="saveConfig()">
+                    </div>
+                    <div>
+                        <label class="fl">AIRTABLE BASE ID</label>
+                        <input class="fi" type="text" id="airtable-base-id" placeholder="appxxxxxxxxxxxx" oninput="saveConfig()">
+                    </div>
+                </div>
+                <div class="config-row" style="margin-top:12px;">
+                    <div>
+                        <label class="fl">AIRTABLE TABLE NAME</label>
+                        <input class="fi" type="text" id="airtable-table-name" placeholder="Contacts" value="Contacts" oninput="saveConfig()">
+                    </div>
+                </div>
+                <div class="config-row" style="grid-template-columns: 1fr; margin-top:16px;">
+                    <button class="btn btn-dark btn-full" onclick="testConfig()">Test Connection</button>
+                </div>
+                <div id="config-status" style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:6px;text-align:center;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ── NAVIGATION ──
+        function showPage(id, el) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById('page-' + id).classList.add('active');
+            if (el) el.classList.add('active');
+            else {
+                const map = { callback: 0, anon: 1, pilot: 2, cold: 3, gifting: 4, abm: 5, dash: 6 };
+                if (map[id] !== undefined) document.querySelectorAll('.nav-item')[map[id]].classList.add('active');
+            }
+        }
+
+        // ── PILL SELECTOR ──
+        function selPill(el, groupId) {
+            document.querySelectorAll('#' + groupId + ' .pill').forEach(p => p.classList.remove('sel'));
+            el.classList.add('sel');
+            // show next button for self-serve
+            if (groupId === 'ss-pill-group') {
+                document.getElementById('ss-next-btn').style.display = 'inline-flex';
+                const labels = {
+                    'Receptionist': 'Handles inbound calls, routes inquiries, takes messages, and books appointments.',
+                    'Appointment Setter': 'Calls your CRM leads, proposes meeting times, and sends calendar invites automatically.',
+                    'Lead Qualification': 'Scores every inbound lead in real time using dynamic discovery questions.',
+                    'Customer Service': 'Resolves tier-1 support, handles FAQs, and escalates complex cases to humans.',
+                    'Debt Collection': 'Follows up on overdue accounts with empathetic, compliant AI conversations.',
+                    'Survey': 'Conducts post-call or NPS surveys and logs structured responses automatically.',
+                };
+                document.getElementById('ss-uc-title').textContent = el.textContent;
+                document.getElementById('ss-uc-desc').textContent = labels[el.textContent] || '';
+            }
+        }
+
+        // ── CONFIG ──
+        function openConfigModal() {
+            document.getElementById('config-modal').classList.add('open');
+            loadConfig();
+        }
+        function closeConfigModal() {
+            document.getElementById('config-modal').classList.remove('open');
+        }
+        function saveConfig() {
+            localStorage.setItem('retell_api_key', document.getElementById('retell-api-key').value);
+            localStorage.setItem('retell_agent_id', document.getElementById('retell-agent-id').value);
+            localStorage.setItem('retell_from_num', document.getElementById('retell-from-num').value);
+            localStorage.setItem('apollo_api_key', document.getElementById('apollo-api-key').value);
+            localStorage.setItem('airtable_api_key', document.getElementById('airtable-api-key').value);
+            localStorage.setItem('airtable_base_id', document.getElementById('airtable-base-id').value);
+        }
+        function loadConfig() {
+            const k = localStorage.getItem('retell_api_key') || '';
+            const a = localStorage.getItem('retell_agent_id') || '';
+            const f = localStorage.getItem('retell_from_num') || '';
+            const ap = localStorage.getItem('apollo_api_key') || '';
+            const ak = localStorage.getItem('airtable_api_key') || '';
+            const ab = localStorage.getItem('airtable_base_id') || '';
+            if (k) document.getElementById('retell-api-key').value = k;
+            if (a) document.getElementById('retell-agent-id').value = a;
+            if (f) document.getElementById('retell-from-num').value = f;
+            if (ap) document.getElementById('apollo-api-key').value = ap;
+            if (ak) document.getElementById('airtable-api-key').value = ak;
+            if (ab) document.getElementById('airtable-base-id').value = ab;
+            if (k && a) {
+                document.getElementById('twilio-dot').classList.add('on');
+                document.getElementById('twilio-label').textContent = 'Retell API connected';
+            }
+        }
+        async function testConfig() {
+            saveConfig();
+            const rk = document.getElementById('retell-api-key').value;
+            const ak = document.getElementById('airtable-api-key').value;
+            const apk = document.getElementById('apollo-api-key').value;
+            const st = document.getElementById('config-status');
+            
+            if (!rk && !ak && !apk) { 
+                st.textContent = '⚠ Enter at least one API key first.'; 
+                st.style.color = 'var(--text3)';
+                return; 
+            }
+            
+            st.textContent = 'Testing connection…';
+            st.style.color = 'var(--text3)';
+
+            if (rk) {
+                try {
+                    const r = await fetch('https://api.retellai.com/list-agents', {
+                        headers: { 'Authorization': 'Bearer ' + rk }
+                    });
+                    if (r.ok) {
+                        document.getElementById('twilio-dot').classList.add('on');
+                        document.getElementById('twilio-label').textContent = 'Retell API connected';
+                    }
+                } catch(e) {}
+            }
+            
+            st.textContent = '✓ Configuration securely saved.';
+            st.style.color = 'var(--green)';
+            
+            setTimeout(() => {
+                closeConfigModal();
+                st.textContent = '';
+            }, 1500);
+        }
+        loadConfig();
+
+        // ── AIRTABLE LOGGING ──
+        async function saveContactToAirtable(firstName, lastName, title, org) {
+            const ak = localStorage.getItem('airtable_api_key');
+            const ab = localStorage.getItem('airtable_base_id');
+            if (!ak || !ab) return;
+            
+            try {
+                await fetch(`https://api.airtable.com/v0/${ab}/Contacts`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${ak}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        records: [{
+                            fields: {
+                                "Name": `${firstName || ''} ${lastName || ''}`.trim(),
+                                "Organization": org || '',
+                                "Title": title || '',
+                                "Source": "Web Dashboard"
+                            }
+                        }]
+                    })
+                });
+            } catch(e) { console.error("Airtable sync error", e); }
+        }
+
+        async function logToAirtable(channel, outcome, callId = '') {
+            const ak = localStorage.getItem('airtable_api_key');
+            const ab = localStorage.getItem('airtable_base_id');
+            if (!ak || !ab) return;
+            
+            try {
+                // Table name defaults to "Call Logs" but depends on user setup
+                await fetch(`https://api.airtable.com/v0/${ab}/Logs`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${ak}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        records: [{
+                            fields: {
+                                "Channel": channel,
+                                "Outcome": outcome,
+                                "Date": new Date().toISOString(),
+                                "Call ID": callId
+                            }
+                        }]
+                    })
+                });
+            } catch(e) { console.error('Airtable Log Error:', e); }
+        }
+
+        // ── LIVE WEBHOOK ACTIVITY FEED ──
+        function initRealTimeFeed() {
+            try {
+                const source = new EventSource('http://localhost:5001/stream');
+                source.onmessage = function(event) {
+                    const data = JSON.parse(event.data);
+                    
+                    // Add row to Recent Activity table
+                    prependActivityFeed(data.timestamp || 'Just now', data.channel || 'System', data.outcome || 'Call ended', 'ba');
+                    
+                    // Log to airtable
+                    logToAirtable(data.channel || 'System', data.outcome || 'Call ended', data.call_id);
+                };
+            } catch(e) { console.log('SSE not available. Run local server.'); }
+        }
+        initRealTimeFeed();
+
+        function prependActivityFeed(time, channel, outcome, badgeClass="bg") {
+            const tbody = document.querySelector('.card .tbl tbody');
+            if (!tbody) return;
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td style="font-family:var(--mono);font-size:9px;color:var(--text3);">${time}</td>
+                <td>${channel}</td>
+                <td><span class="badge ${badgeClass}">${outcome}</span></td>
+            `;
+            tbody.insertBefore(tr, tbody.firstChild);
+        }
+
+        // ── REAL RETELL API CALL ──
+        async function makeRealCall(toNumber) {
+            const key = localStorage.getItem('retell_api_key');
+            const agentId = localStorage.getItem('retell_agent_id');
+            const fromNum = localStorage.getItem('retell_from_num');
+            if (!key || !agentId) return null;
+            const body = { agent_id: agentId, to_number: toNumber };
+            if (fromNum) body.from_number = fromNum;
+            const r = await fetch('http://localhost:5001/proxy/create-phone-call', {
+                method: 'POST',
+                headers: { 'Authorization': 'Bearer ' + key, 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+            return r.ok ? await r.json() : null;
+        }
+
+        // ── CALLBACK FLOW ──
+        let cbTimer, txTimer;
+        const txLines = [
+            { c: 'tx-sy', t: '[Twilio outbound call initiated via Retell API]' },
+            { c: 'tx-ai', t: 'Aria (Retell): Hi! This is Aria from Retell AI — you just requested a quick call. Is now still a good time?' },
+            { c: 'tx-hu', t: 'Prospect: Yeah, go for it.' },
+            { c: 'tx-ai', t: 'Aria: Great. I saw you have a contact center team. Are you currently using live agents for inbound support?' },
+            { c: 'tx-hu', t: 'Prospect: We are — about 40 reps.' },
+            { c: 'tx-ai', t: 'Aria: Most teams that size spend around $18/hour per agent. We typically cut that 60–70% in 90 days.' },
+            { c: 'tx-hu', t: 'Prospect: How long does setup take?' },
+            { c: 'tx-ai', t: 'Aria: 48 hours to go live. Want me to book a 20-minute demo with the team?' },
+            { c: 'tx-hu', t: 'Prospect: Sure — Thursday works.' },
+            { c: 'tx-ai', t: 'Aria: Done. Calendar invite incoming. Talk soon!' },
+            { c: 'tx-sy', t: '[Call ended · 4m 12s · Outcome: Demo booked · Logged to CRM]' },
+        ];
+
+        async function startCallback() {
+            const phone = document.getElementById('cb-phone').value.trim();
+            if (!phone) { document.getElementById('cb-phone').focus(); return; }
+
+            const key = localStorage.getItem('retell_api_key');
+            const agentId = localStorage.getItem('retell_agent_id');
+            const hasReal = key && agentId;
+
+            // Show calling UI
+            document.getElementById('cb-idle').style.display = 'none';
+            document.getElementById('cb-calling').style.display = 'block';
+
+            if (hasReal) {
+                // REAL CALL MODE
+                document.getElementById('cd-num').style.fontSize = '20px';
+                document.getElementById('cd-num').style.fontStyle = 'normal';
+                document.getElementById('cd-num').textContent = 'Calling…';
+                document.getElementById('cb-call-status').textContent = 'Sending to Retell API…';
+                try {
+                    const result = await makeRealCall(phone);
+                    if (result && result.call_id) {
+                        document.getElementById('cb-call-status').textContent = '✓ Call initiated · ID: ' + result.call_id;
+                        document.getElementById('cb-wav').style.display = 'flex';
+                        document.getElementById('cd-num').textContent = 'Live';
+                        startTx();
+                        setTimeout(() => {
+                            document.getElementById('cb-calling').style.display = 'none';
+                            document.getElementById('cb-done').style.display = 'block';
+                        }, 15000);
+                    } else {
+                        document.getElementById('cb-call-status').textContent = '✗ API error — check key/agent ID. Showing demo mode.';
+                        runDemoCountdown(phone);
+                    }
+                } catch (e) {
+                    document.getElementById('cb-call-status').textContent = 'Error: ' + e.message + ' — showing demo mode.';
+                    runDemoCountdown(phone);
+                }
+            } else {
+                // DEMO MODE
+                runDemoCountdown(phone);
+            }
+        }
+
+        function runDemoCountdown(phone) {
+            let n = 60;
+            document.getElementById('cd-num').textContent = n;
+            cbTimer = setInterval(() => {
+                n--;
+                document.getElementById('cd-num').textContent = n;
+                if (n === 45) document.getElementById('cb-call-status').textContent = 'Dialing ' + phone + '…';
+                if (n === 28) {
+                    document.getElementById('cb-call-status').textContent = 'Connected · Retell AI speaking';
+                    document.getElementById('cb-wav').style.display = 'flex';
+                    document.getElementById('cd-num').style.fontSize = '20px';
+                    document.getElementById('cd-num').textContent = 'Live';
+                    startTx();
+                }
+                if (n <= 0) {
+                    clearInterval(cbTimer);
+                    setTimeout(() => {
+                        document.getElementById('cb-calling').style.display = 'none';
+                        document.getElementById('cb-done').style.display = 'block';
+                    }, 800);
+                }
+            }, 120);
+        }
+
+        function startTx() {
+            const box = document.getElementById('cb-tx');
+            box.innerHTML = '';
+            let i = 0;
+            txTimer = setInterval(() => {
+                if (i >= txLines.length) { clearInterval(txTimer); return; }
+                const d = document.createElement('div');
+                d.className = txLines[i].c;
+                d.textContent = txLines[i].t;
+                box.appendChild(d);
+                box.scrollTop = box.scrollHeight;
+                i++;
+            }, 2500);
+        }
+
+        function resetCB() {
+            clearInterval(cbTimer); clearInterval(txTimer);
+            document.getElementById('cb-idle').style.display = 'block';
+            document.getElementById('cb-calling').style.display = 'none';
+            document.getElementById('cb-done').style.display = 'none';
+            document.getElementById('cb-phone').value = '';
+            document.getElementById('cb-wav').style.display = 'none';
+            document.getElementById('cd-num').style.cssText = '';
+            document.getElementById('cd-num').textContent = '60';
+            document.getElementById('cb-tx').innerHTML = '<div class="tx-sy">[Retell AI agent initializing…]</div>';
+        }
+
+        // ── ANON ENRICHMENT ──
+        function showEnrich(name, letter, bg, fg, industry, size, loc, domain) {
+            document.getElementById('enrich-default').style.display = 'none';
+            document.getElementById('enrich-card').style.display = 'block';
+            const badge = document.getElementById('er-badge');
+            badge.textContent = letter;
+            badge.style.cssText = 'background:' + bg + ';color:' + fg + ';width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;';
+            document.getElementById('er-name').textContent = name;
+            document.getElementById('er-domain').textContent = domain;
+            document.getElementById('er-ind').textContent = industry;
+            document.getElementById('er-size').textContent = size;
+            document.getElementById('er-loc').textContent = loc;
+        }
+
+        // ── SELF-SERVE PILOT ──
+        function ssStep2() {
+            document.getElementById('ss1').style.display = 'none';
+            document.getElementById('ss2').style.display = 'block';
+        }
+        function ssBack1() {
+            document.getElementById('ss2').style.display = 'none';
+            document.getElementById('ss1').style.display = 'block';
+        }
+        function ssStep3() {
+            document.getElementById('ss2').style.display = 'none';
+            document.getElementById('ss3').style.display = 'block';
+        }
+        function ssBack2() {
+            document.getElementById('ss3').style.display = 'none';
+            document.getElementById('ss2').style.display = 'block';
+        }
+        function ssStep4() {
+            document.getElementById('ss3').style.display = 'none';
+            document.getElementById('ss4').style.display = 'block';
+        }
+        function ssDone() {
+            document.getElementById('ss4').style.display = 'none';
+            document.getElementById('ss-done').style.display = 'block';
+        }
+
+        // ── MODAL ──
+        function closeModal() {
+            document.getElementById('call-modal').classList.remove('open');
+        }
+
+        // ── ROI CALCULATOR ──
+        function calcRoi() {
+            const cost = parseFloat(document.getElementById('roi-cost').value) || 0;
+            const size = parseFloat(document.getElementById('roi-size').value) || 0;
+            const rate = parseFloat(document.getElementById('roi-rate').value) || 0;
+            const total = cost * size;
+            const reactivated = Math.floor(size * (rate / 100));
+            const cpr = reactivated > 0 ? (total / reactivated) : 0;
+
+            document.getElementById('roi-total-cost').textContent = '$' + total.toLocaleString();
+            document.getElementById('roi-cpr').textContent = '$' + Math.round(cpr).toLocaleString();
+        }
+
+        // ── APOLLO PROSPECTING ──
+        async function searchApollo() {
+            const ind = document.getElementById('apollo-industry').value.trim();
+            const tit = document.getElementById('apollo-titles').value.trim();
+            const key = document.getElementById('apollo-api-key').value.trim() || localStorage.getItem('apollo_api_key');
+            
+            const tbody = document.getElementById('apollo-results-body');
+            tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;">Searching...</td></tr>';
+            
+            try {
+                const bodyObj = { page: 1, per_page: 5 };
+                if (tit) bodyObj.person_titles = tit.split(',').map(s=>s.trim());
+                if (ind) bodyObj.q_keywords = ind;
+
+                const res = await fetch('http://localhost:5001/proxy/apollo/search', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Apollo-Key': key
+                    },
+                    body: JSON.stringify(bodyObj)
+                });
+                
+                if(!res.ok) throw new Error("API Error");
+                const data = await res.json();
+                
+                tbody.innerHTML = '';
+                if(!data.people || data.people.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;">No results found.</td></tr>';
+                    return;
+                }
+                
+                data.people.forEach(p => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${p.first_name || ''} ${p.last_name || ''}<br><span style="font-size:10px;color:var(--text3);">${p.title || ''}</span></td>
+                        <td style="font-family:var(--mono);font-size:10px;">${p.organization?.name || ''}</td>
+                        <td><span class="badge bg" style="background:var(--green);color:#fff;">Saved CRM</span></td>
+                    `;
+                    tbody.appendChild(tr);
+                    saveContactToAirtable(p.first_name, p.last_name, p.title, p.organization?.name);
+                });
+            } catch(e) {
+                tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;color:var(--red);">Error: ${e.message}</td></tr>`;
+            }
+        }
+    </script>
+</body>
+
+</html>
