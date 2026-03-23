@@ -1,0 +1,26 @@
+[build]
+  publish = "." # Since index.html is in the root
+  functions = "netlify/functions"
+  
+[dev]
+  framework = "#static"
+  
+[[redirects]]
+  from = "/api/bot/jsearch"
+  to = "/.netlify/functions/jsearch"
+  status = 200
+
+[[redirects]]
+  from = "/api/bot/jsearch/job-details"
+  to = "/.netlify/functions/jsearch-job-details"
+  status = 200
+
+[[redirects]]
+  from = "/api/bot/jsearch/estimated-salary"
+  to = "/.netlify/functions/jsearch-estimated-salary"
+  status = 200
+  
+[[redirects]]
+  from = "/api/bot/update-job-board"
+  to = "/.netlify/functions/update-job-board"
+  status = 200
