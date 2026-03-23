@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Retell AI — GTM Experiments</title>
+    <title>Job Automation Dashboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link
         href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap"
@@ -1398,27 +1398,39 @@
                     <div class="sb-subtitle">GTM EXPERIMENTS</div>
                 </div>
             </div>
-            <div class="sb-section">EXPERIMENTS</div>
+            <div class="sb-section">TRACKING</div>
             <div class="nav-list">
-                <div class="nav-item active" onclick="showPage('callback',this)">
+                <div class="nav-item active" data-target="jobs">
+                    <div class="nav-dot"></div>
+                    Job Tracker
+                </div>
+                <div class="nav-item" data-target="anon">
+                    <div class="nav-dot"></div>
+                    Activity Feed
+                </div>
+            </div>
+
+            <div class="sb-section" style="margin-top:20px">EXPERIMENTS (ARCHIVE)</div>
+            <div class="nav-list">
+                <div class="nav-item" data-target="callback">
                     <div class="nav-dot"></div>Callback Flow<span class="nav-status ns-live">LIVE</span>
                 </div>
-                <div class="nav-item" onclick="showPage('ivr',this)">
+                <div class="nav-item" data-target="ivr">
                     <div class="nav-dot"></div>IVR Teardown Lab<span class="nav-status ns-live">LIVE</span>
                 </div>
-                <div class="nav-item" onclick="showPage('anon',this)">
+                <div class="nav-item" data-target="anon-archive">
                     <div class="nav-dot"></div>Anon Visitor → Lead<span class="nav-status ns-live">LIVE</span>
                 </div>
-                <div class="nav-item" onclick="showPage('pilot',this)">
+                <div class="nav-item" data-target="pilot">
                     <div class="nav-dot"></div>Permissionless Pilot<span class="nav-status ns-live">LIVE</span>
                 </div>
-                <div class="nav-item" onclick="showPage('signal',this)">
+                <div class="nav-item" data-target="signal">
                     <div class="nav-dot"></div>Signal Triggers<span class="nav-status ns-next">NEXT</span>
                 </div>
             </div>
             <div class="sb-section" style="margin-top:14px">RESULTS</div>
             <div class="nav-list">
-                <div class="nav-item" onclick="showPage('dash',this)">
+                <div class="nav-item" data-target="dash">
                     <div class="nav-dot"></div>Experiment Dashboard
                 </div>
                 <div class="nav-item" style="margin-top:12px;border:1px dashed rgba(255,255,255,0.2)"
@@ -1448,8 +1460,40 @@
         <!-- MAIN -->
         <div class="main">
 
+            <!-- PAGE: JOB TRACKER -->
+            <div class="page active" id="page-jobs">
+                <div class="hero-band">
+                    <div class="exp-tag">
+                        <div class="pulse"></div> Tracking Jobs
+                    </div>
+                    <h1>Job <em>Automation</em></h1>
+                    <div class="hero-sub">Automatically capturing applications from clawdbot.</div>
+                </div>
+                <div class="content">
+                    <div class="card">
+                        <div class="card-title" style="margin-bottom:12px">Latest Job Entries</div>
+                        <table class="tbl" id="jobsTable">
+                            <thead>
+                                <tr>
+                                    <th>DATE</th>
+                                    <th>TITLE</th>
+                                    <th>COMPANY</th>
+                                    <th>SALARY</th>
+                                    <th>LINK</th>
+                                </tr>
+                            </thead>
+                            <tbody id="jobsTbody">
+                                <tr>
+                                    <td colspan="5" style="text-align: center; color: var(--text3)">Loading jobs...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
             <!-- ═══ PAGE: CALLBACK FLOW ═══ -->
-            <div class="page active" id="page-callback">
+            <div class="page" id="page-callback">
                 <div class="hero-band">
                     <div class="hero-dot-grid"></div>
                     <div class="exp-tag">
@@ -1557,7 +1601,7 @@
                                     <div style="display:flex;gap:8px">
                                         <button class="btn btn-ghost" style="flex:1" onclick="resetCB()">New
                                             call</button>
-                                        <button class="btn btn-dark" style="flex:1" onclick="showPage('dash',null)">View
+                                        <button class="btn btn-dark" style="flex:1" data-target="dash">View
                                             results →</button>
                                     </div>
                                 </div>
@@ -2101,7 +2145,7 @@
                                         onclick="alert('Physical gift queued: Personalized cookies + handwritten note to their office address. Estimated delivery: 2 business days.')">📦
                                         Send Gift</button>
                                 </div>
-                                <button class="btn btn-dark btn-full btn-sm" onclick="showPage('dash',null)">View in
+                                <button class="btn btn-dark btn-full btn-sm" data-target="dash">View in
                                     dashboard →</button>
                             </div>
                         </div>
@@ -2236,7 +2280,7 @@
                             </div>
                             <div style="display:flex;gap:8px">
                                 <button class="btn btn-dark" style="flex:1" onclick="copyEmail()">Copy email</button>
-                                <button class="btn btn-ghost" onclick="showPage('ivr',null)">See teardown →</button>
+                                <button class="btn btn-ghost" data-target="ivr">See teardown →</button>
                             </div>
                             <div id="copy-confirm"
                                 style="display:none;text-align:center;font-size:11px;color:var(--green);margin-top:8px">
@@ -2629,14 +2673,6 @@
     </div>
 
     <script>
-        // ── NAVIGATION ──
-        function showPage(id, el) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById('page-' + id).classList.add('active');
-            if (el) el.classList.add('active');
-        }
-
         function selPill(el, gid) {
             document.querySelectorAll('#' + gid + ' .pill').forEach(p => p.classList.remove('sel'));
             el.classList.add('sel');
