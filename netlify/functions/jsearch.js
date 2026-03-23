@@ -20,7 +20,7 @@ export const handler = async (event) => {
         const responseData = await response.json();
         
         return {
-            statusCode: 200,
+            statusCode: 202,
             headers: {
                 "Content-Type": "application/json",
                 "Access-Control-Allow-Origin": "*" // CORS

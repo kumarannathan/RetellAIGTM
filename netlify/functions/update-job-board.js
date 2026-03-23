@@ -82,7 +82,7 @@ export const handler = async (event) => {
         // Committing to the repo will automatically trigger a Netlify build
 
         return {
-            statusCode: 200,
+            statusCode: 202,
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ message: "Job added and pushed to GitHub successfully", job: newJob })
         };
