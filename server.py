@@ -58,7 +58,7 @@ def add_job():
         with open(JOBS_FILE, 'w') as f:
             json.dump(jobs, f, indent=2)
             
-        return jsonify({"message": "Job added successfully", "job": job_entry}), 201
+        return jsonify({"message": "Job added successfully", "job": job_entry}), 202
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -201,7 +201,7 @@ def bot_jsearch():
             f.write(f"Query: {query}\n\n")
             f.write("\n".join(memory_lines) + "\n")
             
-        return jsonify({"message": f"Successfully added {len(jobs_added)} jobs", "jobs": jobs_added}), 200
+        return jsonify({"message": f"Successfully added {len(jobs_added)} jobs", "jobs": jobs_added}), 202
         
     except Exception as e:
         return jsonify({"error": str(e)}), 500

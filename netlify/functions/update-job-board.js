@@ -18,7 +18,7 @@ export const handler = async (event) => {
         const GITHUB_REPO = process.env.GITHUB_REPO || "RetellAIGTM"; 
         
         if (!GITHUB_TOKEN) {
-            return { statusCode: 500, body: JSON.stringify({ error: "GitHub PAT not configured" }) };
+            return { statusCode: 401, body: JSON.stringify({ error: "GitHub PAT not configured in environment variables" }) };
         }
 
         const filePath = "jobs.json";
